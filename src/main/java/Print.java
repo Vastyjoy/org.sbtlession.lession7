@@ -1,5 +1,5 @@
 public class Print {
-    public void print(){
+    public void print() {
         System.out.println("HELLO WORLD NOT PLUGIN");
     }
 }
