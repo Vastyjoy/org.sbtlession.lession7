@@ -2,6 +2,6 @@ package helloWorldPlugin;
 
 public class Print {
     public void print(){
-        System.out.println("HELLO WORLD");
+        System.out.println("HELLO WORLD PLUGIN");
     }
 }
