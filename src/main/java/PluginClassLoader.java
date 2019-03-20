@@ -4,6 +4,7 @@ import java.util.Map;
 
 public class PluginClassLoader extends ClassLoader {
     Map<String, Class> classMap = new HashMap<>();
+    private final boolean flagOuter=false;
     private final String[] classPath;
 
     public PluginClassLoader(String[] classPath) {
@@ -26,7 +27,7 @@ public class PluginClassLoader extends ClassLoader {
         if (f == null) return findSystemClass(name);
         try {
             byte[] classBytes = loadFileAsBytes(f);
-            System.out.println(name + " = " + classBytes.length);
+            if(flagOuter)System.out.println(name + " = " + classBytes.length);
             result = defineClass(name, classBytes, 0, classBytes.length);
 
 
@@ -42,6 +43,12 @@ public class PluginClassLoader extends ClassLoader {
 
     }
 
+    /**
+     * Поиск файла с расширением extension во всех директориях classPath,
+     * @param name имя файла hello
+     * @param extension расширение файла .class
+     * @return File если найден файл, null если не найден
+     */
     protected File findFile(String name, String extension) {
         File f;
         for (int i = 0; i < classPath.length; i++) {
@@ -54,6 +61,12 @@ public class PluginClassLoader extends ClassLoader {
 
     }
 
+    /**
+     * Загружает файл в память в ввиде массива байт
+     * @param file
+     * @return файл в виде массива байт
+     * @throws IOException
+     */
     protected static byte[] loadFileAsBytes(File file)
             throws IOException {
         byte[] result = new byte[(int) file.length()];

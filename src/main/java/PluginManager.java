@@ -14,6 +14,13 @@ public class PluginManager {
         pluginClassLoader = new PluginClassLoader(new String[]{pluginRootDirectory});
     }
 
+    /**
+     * Загружает классы плагинов. По условию имя главного класса плагина должно совпадать с именем папки в которой он расположен
+     * @param pluginName
+     * @param pluginClassName
+     * @return
+     * @throws ClassNotFoundException
+     */
     protected Plugin load(String pluginName, String pluginClassName) throws ClassNotFoundException {
         Plugin plugin = null;
         try {
@@ -24,11 +31,17 @@ public class PluginManager {
             System.err.println("Bad instance class :" + pluginName + "." + pluginClassName);
         } catch (IllegalAccessException x) {
             System.err.println(x.toString());
+        } catch (ClassCastException x){
+            System.err.println("Class "+pluginName+"."+pluginClassName+".class not implements Plugin interface ");
         }
         return plugin;
 
     }
 
+    /**
+     *
+     * @return возвращает все директории в рутовой папке.
+     */
     protected List<String> getAllPath() {
         File file = new File(pluginRootDirectory);
         List<String> listResult = new ArrayList<>();
@@ -39,20 +52,27 @@ public class PluginManager {
         return listResult;
     }
 
+    /**
+     * Инициализирует все плагины из рутовой папки
+     */
     public void initializePlugins() {
 
         List<String> pluginName = getAllPath();
-        try {
-            for (String name : pluginName) {
-                load(name, name);
-            }
 
-        } catch (ClassNotFoundException x) {
-            System.err.println(x.toString());
+            for (String name : pluginName) {
+                try {
+                    load(name, name);
+                }catch (ClassNotFoundException x) {
+                        System.err.println("Plugin bad load:"+ x.toString());
+                    }
+
+                }
+
         }
 
-    }
-
+    /**
+     * Запускает все зарегистрированные плагины
+     */
     public void startAll() {
         for (Plugin plugin : plugins) plugin.doUseful();
     }

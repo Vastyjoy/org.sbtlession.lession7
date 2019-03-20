@@ -20,7 +20,7 @@ public class EncryptedClassLoader extends ClassLoader {
     }
 
     /**
-     * ищет файлы с расширением extension
+     * ищет файлы с расширением extension в dir
      *
      * @param extension расширение файлов
      * @return список всех файлов с расширением extension в рутовой папке
